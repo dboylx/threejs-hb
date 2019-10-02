@@ -1,9 +1,12 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 
 module.exports = {
 	entry: {
 		index: './src/index.js',
+		lib: './src/lib.js',
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -12,19 +15,28 @@ module.exports = {
   
 	module: {
 		rules: [
-		{
-			test: /\.(png|jpe?g|gif)$/i,
-			use: [
-			  {
-				loader: 'file-loader',
-			  },
-			],
-		},
-		{
-			test: /\.exec\.js$/,
-			use: [ 'script-loader' ]
-		}
-	],
+			{
+				test: /\.(png|jpe?g|jpg|gif)$/i,
+				use: [
+				  {
+					loader: 'file-loader',
+				  },
+				],
+			},
+			{
+				test: /\.exec\.js$/,
+				use: [ 'script-loader' ]
+			},
+			{
+			  test: /\.(html)$/,
+			  use: {
+				loader: 'html-loader',
+				options: {
+				  attrs: [':src']
+				}
+			  }
+			},
+		],
 	},
 	
 	devServer:{
@@ -36,9 +48,10 @@ module.exports = {
 	},
 	
 	plugins: [
+		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
-		  filename: 'index.html', // 配置输出文件名和路径
-		  template: './public/index.html' // 配置要被编译的html文件
-		})
+		  filename: 'index.html',
+		  template: './public/index.html'
+		}),
 	]
 }
