@@ -10,18 +10,17 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: '[name].[hash:8].js'
+		filename: 'js/[name].[hash:8].js'
 	},
   
 	module: {
 		rules: [
 			{
 				test: /\.(png|jpe?g|jpg|gif)$/i,
-				use: [
-				  {
-					loader: 'file-loader',
-				  },
-				],
+				loader: 'file-loader',
+				options: {
+					name: '[path][name].[ext]',
+				},
 			},
 			{
 				test: /\.exec\.js$/,
