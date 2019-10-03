@@ -24,8 +24,12 @@ var light = new THREE.AmbientLight( 0xf0f0f0 ); // soft white light
 scene.add( light );
 		
 // 设置点光源
-var light = new THREE.PointLight( 0xff0000, 1, 100 );
-light.position.set( 1, -1, 2 );
+var light = new THREE.PointLight( 0xff0000, 5.5, 4.2 );
+light.position.set( 1, -1.9, 4 );
+scene.add( light );
+
+var light = new THREE.PointLight( 0xff0000, 2, 4.2 );
+light.position.set( 1, 3, 0 );
 scene.add( light );
 
 // 添加一个立方体，使用红色普通渲染材质
@@ -50,7 +54,7 @@ scene.add( line );
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
-	cube.rotation.y += 0.01;
+	cube.rotation.y += 0.02;
 	
  }
 animate();
