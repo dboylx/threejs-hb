@@ -19,8 +19,8 @@ module.exports = {
 				test: /\.(png|jpe?g|jpg|gif)$/i,
 				loader: 'file-loader',
 				options: {
-					name: '[path][name].[ext]',
-				},
+					name: 'img/[name]-[contenthash:7].[ext]',
+ 				},
 			},
 			{
 				test: /\.exec\.js$/,
@@ -51,6 +51,12 @@ module.exports = {
 		new HtmlWebpackPlugin({
 		  filename: 'index.html',
 		  template: './public/index.html'
+		}),
+		new HtmlWebpackPlugin({
+		  filename: 'category.html',
+		  template: './public/category.html',
+          chunks: ['lib'],
+
 		}),
 	]
 }

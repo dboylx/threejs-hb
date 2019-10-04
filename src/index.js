@@ -1,5 +1,6 @@
 require('script-loader!./lib.js') 
-console.log("ok index!!!")
+import img from '../public/img/5deb20343f8e4a075f6daf9138a193df.jpg';
+
 var THREE = require('three');
 
 // 创建three对像
@@ -9,7 +10,12 @@ document.body.appendChild( renderer.domElement );
 
 // 定义全局变量
 var mouse = new THREE.Vector2();
+
+// 定义场景
 var scene = new THREE.Scene();
+scene.background = new THREE.TextureLoader().load( img );
+
+// 定义摄像机
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 // 相机Z往后移5个单位
@@ -20,12 +26,12 @@ var raycaster = new THREE.Raycaster();
 raycaster.params.Points.threshold = 0.1;
 
 // 设置环境光
-var light = new THREE.AmbientLight( 0xf0f0f0 ); // soft white light
+var light = new THREE.AmbientLight( 0xffffff); // soft white light
 scene.add( light );
 		
 // 设置点光源
 var light = new THREE.PointLight( 0xff0000, 5.5, 4.2 );
-light.position.set( 1, -1.9, 4 );
+light.position.set( 1, 0, 4.5);
 scene.add( light );
 
 var light = new THREE.PointLight( 0xff0000, 2, 4.2 );
@@ -48,7 +54,7 @@ lineGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 )
 lineGeometry.setDrawRange( 0, pointNumberTotal );
 lineGeometry.dynamic = true;
 var line = new THREE.Line( lineGeometry, material );
-scene.add( line );
+//scene.add( line );
 
 // 开始动画
 function animate() {
@@ -67,7 +73,7 @@ function onDocumentMouseMove( event ) {
 	
 	// 把页面上的XY坐标转换成canvas的坐标系 
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 	
 	// 
 	// 把平面坐标，转换到3D场景中的XYZ的坐标
@@ -84,12 +90,20 @@ function onDocumentMouseMove( event ) {
 	var dir = vector.sub( camera.position ).normalize();
 	var distance = - camera.position.z / dir.z;
 	var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
- 	//cube.position.copy(pos)
+ 	cube.position.copy(pos)
 	
+	
+	// 获取raycaster感兴趣的对像 
+    raycaster.setFromCamera( mouse, camera );    
+    var intersects = raycaster.intersectObjects( scene.children );
+    for ( var i = 0; i < intersects.length; i++ ) {
+        //console.log( intersects[ i ] ); 
+    }
+	
+	// 画线的逻辑计算，添加点
 	var positions = line.geometry.attributes.position.array;
 	var x, y, z, index;
 	x = y = z = index = 0;
-	
 	
 	positions.set([pos.x, pos.y +.5,pos.z], pointCounter * 3);
 	line.geometry.setDrawRange( pointCounter * 3, pointNumberTotal );
