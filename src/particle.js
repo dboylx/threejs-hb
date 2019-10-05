@@ -4,7 +4,7 @@ import catImg from '../public/img/img_219849.png';
 
 var THREE = require('three');
 
-var mousePosition = {};
+var mousePosition = {x:0,y:0};
 
 // 创建three对像
 var renderer = new THREE.WebGLRenderer();
@@ -24,18 +24,14 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 // 相机Z往后移5个单位
 camera.position.z = 5;
 
-console.log(catImg)
-
 // 设置显示点的材质
 var sprite1 = new THREE.TextureLoader().load( catImg );
 var material = new THREE.PointCloudMaterial({
   color: 0xffffcc,
-  size: 0.1,
+  size: 0.037,
   map: sprite1, 
   transparent: true, 
 });
-
-
 
 // 生成点的信息
 var pointsGeometry = new THREE.Geometry();
