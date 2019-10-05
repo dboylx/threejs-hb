@@ -36,8 +36,8 @@ var material = new THREE.PointCloudMaterial({
 // 生成点的信息
 var pointsGeometry = new THREE.Geometry();
 var x, y, z;
-var zone = 7;
-var pointTotal = 3000;
+var zone = 9;
+var pointTotal = 9000;
 for(var i=0;i<pointTotal;i++){
   x = (Math.random() * zone) - zone / 2;
   y = (Math.random() * zone) - zone / 2;
