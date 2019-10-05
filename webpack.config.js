@@ -7,6 +7,7 @@ module.exports = {
 	entry: {
 		index: './src/index.js',
 		particle: './src/particle.js',
+		hemisphere: './src/hemisphere.js',
 		lib: './src/lib.js',
 	},
 	output: {
@@ -59,5 +60,13 @@ module.exports = {
           chunks: ['lib','particle'],
 
 		}),
+		
+		new HtmlWebpackPlugin({
+		  filename: 'hemisphere.html',
+		  template: './public/hemisphere.html',
+          chunks: ['lib','hemisphere'],
+
+		}),
+		
 	]
 }
