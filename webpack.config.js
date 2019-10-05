@@ -6,6 +6,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
 	entry: {
 		index: './src/index.js',
+		particle: './src/particle.js',
 		lib: './src/lib.js',
 	},
 	output: {
@@ -53,9 +54,9 @@ module.exports = {
 		  template: './public/index.html'
 		}),
 		new HtmlWebpackPlugin({
-		  filename: 'category.html',
-		  template: './public/category.html',
-          chunks: ['lib'],
+		  filename: 'particle.html',
+		  template: './public/particle.html',
+          chunks: ['lib','particle'],
 
 		}),
 	]
