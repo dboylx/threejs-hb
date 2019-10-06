@@ -1,6 +1,6 @@
 require('script-loader!./lib.js') 
-import img from '../public/img/5deb20343f8e4a075f6daf9138a193df.jpg';
-import catImg from '../public/img/img_219849.png';
+import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
+import catImg from '../img/img_219849.png';
 
 var THREE = require('three');
 
