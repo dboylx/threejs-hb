@@ -57,7 +57,7 @@ module.exports = {
 		contentBase:path.resolve(__dirname,'dist'), //基本目录结构
 		host:'localhost',  //ip地址
 		compress:true, //开启服务器端压缩
-		port:8888 ,
+		port:9999 ,
 		open: true,
 	},
 	
