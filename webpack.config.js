@@ -63,13 +63,13 @@ module.exports = {
 	
 	plugins: [
 
-	
 	    new webpack.ProgressPlugin(),
-
 
 		new HtmlWebpackPlugin({
 		  filename: 'index.html',
-		  template: './src/index.html'
+		  template: './src/index.html',
+			chunks: ['lib','index'],
+			// excludeChunks: ['particle','hemisphere'],
 		}),
 		new HtmlWebpackPlugin({
 		  filename: 'particle.html',

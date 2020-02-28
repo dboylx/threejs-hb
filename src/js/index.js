@@ -1,5 +1,6 @@
 require('script-loader!./lib.js') 
 import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
+import catImg from '../img/W020170907577401409420.jpg'
 
 
 var THREE = require('three');
@@ -28,6 +29,8 @@ raycaster.params.Points.threshold = 0.1;
 
 // 设置环境光
 var light = new THREE.AmbientLight( 0xffffff); // soft white light
+light.intensity=2;
+
 scene.add( light );
 		
 // 设置点光源
@@ -35,15 +38,30 @@ var light = new THREE.PointLight( 0xff0000, 5.5, 4.2 );
 light.position.set( 1, 0, 4.5);
 scene.add( light );
 
-var light = new THREE.PointLight( 0xff0000, 2, 4.2 );
-light.position.set( 1, 3, 0 );
+var light = new THREE.PointLight( 0xffffff, 0.6, 4.2 );
+light.position.set( 0, 0, 3 );
 scene.add( light );
+
 
 // 添加一个立方体，使用红色普通渲染材质
 var boxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
 var material = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-var cube = new THREE.Mesh( boxGeometry, material );
-cube.rotation.x = 0.3;
+
+
+var textureLoader = new THREE.TextureLoader();
+let loader = new THREE.TextureLoader();
+let materialArray = [
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
+	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
+
+];
+
+
+var cube = new THREE.Mesh( boxGeometry, materialArray);
 scene.add( cube );
 
 // 初始化线对像
