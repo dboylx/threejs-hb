@@ -27,7 +27,14 @@ module.exports = {
 					} },
 				],
 			},
-
+			{ 	test: /\.glb$/,
+				use: [
+					{ loader: 'file-loader',
+						options: {
+							name: 'asset/[name]-[contenthash:7].[ext]',
+						} },
+				],
+			},
 			{
 				test: /\.(png|jpe?g|jpg|gif)$/i,
 				loader: 'file-loader',
@@ -35,8 +42,6 @@ module.exports = {
 					name: 'img/[name]-[contenthash:7].[ext]',
  				},
 			},
-			
-			
 			{
 				test: /\.exec\.js$/,
 				use: [ 'script-loader' ]

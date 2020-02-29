@@ -1,9 +1,12 @@
 require('script-loader!./lib.js') 
 import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
-import catImg from '../img/W020170907577401409420.jpg'
+import catImg from '../img/W020170907577401409420.jpg';
+import cubeAnimation from '../asset/atest7.glb';
+import GLTFLoader from 'three-gltf-loader';
 
 
 var THREE = require('three');
+const clock = new THREE.Clock();
 
 // 创建three对像
 var renderer = new THREE.WebGLRenderer();
@@ -107,13 +110,43 @@ var particleSystem = new THREE.ParticleSystem(
 // add it to the scene
 scene.add(particleSystem);
 
+
+// add gltf file
+// maed by the glender
+var gltfLoader = new GLTFLoader();
+var cube,mixer;
+gltfLoader.load(
+	cubeAnimation,
+	function ( gltf ) {
+
+		const model = gltf.scene;
+		const animations = gltf.animations;
+
+		mixer = new THREE.AnimationMixer( model );
+
+		const action = mixer.clipAction( animations[ 0 ] );
+		action.play();
+
+		model.position.z = -20;
+
+		scene.add( model );
+
+	},
+);
+
+
 // 开始动画
 function animate() {
 	requestAnimationFrame( animate );
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
 	renderer.render( scene, camera );
-	cube.rotation.y += 0.02;
-	
- }
+
+
+}
 animate();
 
 // 监听鼠标移动事件
