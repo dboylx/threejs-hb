@@ -1,7 +1,7 @@
 require('script-loader!./lib.js') 
 import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
 import catImg from '../img/W020170907577401409420.jpg';
-import cubeAnimation from '../asset/atest7.glb';
+import cubeAnimation from '../asset/atest8.glb';
 import GLTFLoader from 'three-gltf-loader';
 
 
