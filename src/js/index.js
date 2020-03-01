@@ -1,3 +1,5 @@
+import {AnimationAction} from "three/src/animation/AnimationAction";
+
 require('script-loader!./lib.js')
 import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
 var THREE = require('three');
@@ -59,6 +61,8 @@ controls.enableZoom = false
 // maed by the glender
 var gltfLoader = new GLTFLoader();
 var cube,mixer;
+
+var monkeyHeadAction ;
 gltfLoader.load(
 	cubeAnimation,
 	function ( gltf ) {
@@ -66,6 +70,11 @@ gltfLoader.load(
 		const model = gltf.scene;
 		const animations = gltf.animations;
 		mixer = new THREE.AnimationMixer( model );
+		monkeyHeadAction = mixer.clipAction( gltf.animations[ 0 ] );
+
+		var action = mixer.clipAction( gltf.animations[ 1 ] );
+ 		action.play();
+
 
 		for(var n in gltf.scene.children){
 			if(gltf.scene.children[n].name == "Plane"){
@@ -79,8 +88,7 @@ gltfLoader.load(
 		model.position.y = -6;
 		scene.add( model );
 
-		mainLight.lookAt(new THREE.Vector3(0,0,0))
-	},
+ 	},
 );
 
 
@@ -132,6 +140,14 @@ function onDocumentMouseMove( event ) {
         //console.log( intersects[ i ] ); 
     }
 
+window.addEventListener( 'click', function(e) {
+	if (e.button === 0) {
+		console.log("点击了鼠标左键");
 
+
+		monkeyHeadAction.reset();
+		monkeyHeadAction.play();
+	}
+});
 
 }
