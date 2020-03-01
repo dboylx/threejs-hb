@@ -62,7 +62,9 @@ controls.enableZoom = false
 var gltfLoader = new GLTFLoader();
 var cube,mixer;
 
-var monkeyHeadAction ;
+var monkeyHeadYesAction ;
+var monkeyHeadNoAction ;
+
 gltfLoader.load(
 	cubeAnimation,
 	function ( gltf ) {
@@ -70,10 +72,27 @@ gltfLoader.load(
 		const model = gltf.scene;
 		const animations = gltf.animations;
 		mixer = new THREE.AnimationMixer( model );
-		monkeyHeadAction = mixer.clipAction( gltf.animations[ 0 ] );
 
-		var action = mixer.clipAction( gltf.animations[ 1 ] );
- 		action.play();
+		for(var a in gltf.animations){
+			var animation = gltf.animations[a];
+			if(animation.name == 'headYes') {
+				var action = mixer.clipAction( animation )
+				monkeyHeadYesAction = action;
+				monkeyHeadYesAction.loop = THREE.LoopOnce;
+			}
+			else if(animation.name == 'headNo') {
+				var action = mixer.clipAction( animation )
+				monkeyHeadNoAction = action;
+				monkeyHeadNoAction.loop = THREE.LoopOnce;
+			}
+			else if(animation.name == 'CubeAction') {
+				var action = mixer.clipAction(animation)
+				action.play();
+			}
+
+		}
+
+
 
 
 		for(var n in gltf.scene.children){
@@ -142,12 +161,20 @@ function onDocumentMouseMove( event ) {
 
 window.addEventListener( 'click', function(e) {
 	if (e.button === 0) {
-		console.log("点击了鼠标左键");
 
-
-		monkeyHeadAction.reset();
-		monkeyHeadAction.play();
+		monkeyHeadYesAction.reset();
+		monkeyHeadYesAction.play();
 	}
 });
+
+	window.addEventListener( 'dblclick', function(e) {
+		if (e.button === 0) {
+ 			monkeyHeadYesAction.reset();
+			monkeyHeadYesAction.stop();
+			monkeyHeadNoAction.reset();
+			monkeyHeadNoAction.play();
+		}
+	});
+
 
 }
