@@ -1,17 +1,25 @@
-require('script-loader!./lib.js') 
+require('script-loader!./lib.js')
 import img from '../img/5deb20343f8e4a075f6daf9138a193df.jpg';
-import catImg from '../img/W020170907577401409420.jpg';
-import cubeAnimation from '../asset/atest8.glb';
-import GLTFLoader from 'three-gltf-loader';
-
-
 var THREE = require('three');
+
+// 加载GLTF的加载器
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+// 镜头的鼠标交互
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+
+import cubeAnimation from '../asset/atest9.glb';
+
+// 当前场景的动画的时钟
 const clock = new THREE.Clock();
 
 // 创建three对像
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
+renderer.physicallyCorrectLights = true;
+renderer.outputEncoding = THREE.sRGBEncoding;
 
 // 定义全局变量
 var mouse = new THREE.Vector2();
@@ -21,95 +29,31 @@ var scene = new THREE.Scene();
 scene.background = new THREE.TextureLoader().load( img );
 
 // 定义摄像机
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
 
 // 相机Z往后移5个单位
-camera.position.z = 5;
+camera.position.z = 10;
+camera.position.y = 105;
+camera.position.x = 1;
+
+// 设置相机观查的对像（但如果用了orbitcontrols，此设置会不起作用）
+camera.lookAt(new THREE.Vector3(0,30,30))
 
 // 初始化投影转换计算器
 var raycaster = new THREE.Raycaster();
 raycaster.params.Points.threshold = 0.1;
 
-// 设置环境光
-var light = new THREE.AmbientLight( 0xffffff); // soft white light
-light.intensity=2;
+// 添加灯光
+// const ambientLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, .1);
+// const mainLight = new THREE.DirectionalLight( 0xffffff, 0.97 );
+// mainLight.position.set( 0, 30, -20 );
+// scene.add( ambientLight, mainLight );
 
-scene.add( light );
-		
-// 设置点光源
-var light = new THREE.PointLight( 0xff0000, 5.5, 4.2 );
-light.position.set( 1, 0, 4.5);
-scene.add( light );
-
-var light = new THREE.PointLight( 0xffffff, 0.6, 4.2 );
-light.position.set( 0, 0, 3 );
-scene.add( light );
-
-
-// 添加一个立方体，使用红色普通渲染材质
-var boxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-
-
-var textureLoader = new THREE.TextureLoader();
-let loader = new THREE.TextureLoader();
-let materialArray = [
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) } ),
-	new THREE.MeshStandardMaterial( { map: loader.load(catImg) }  ),
-
-];
-
-
-var cube = new THREE.Mesh( boxGeometry, materialArray);
-scene.add( cube );
-
-// 初始化线对像
-var pointNumberTotal = 200000;
-var material = new THREE.LineBasicMaterial( { color: 0xffffff ,linewidth: 1} );
-var lineGeometry = new THREE.BufferGeometry(); 
-var positions = new Float32Array( pointNumberTotal * 3 ); // 3 vertices per point
-lineGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-lineGeometry.setDrawRange( 0, pointNumberTotal );
-lineGeometry.dynamic = true;
-var line = new THREE.Line( lineGeometry, material );
-//scene.add( line );
-
-// create the particle variables
-var particleCount = 1800,
-    particles = new THREE.Geometry(),
-    pMaterial = new THREE.ParticleBasicMaterial({
-      color: 0x00FFFF,
-      size: 0.1
-    });
-
-// now create the individual particles
-for (var p = 0; p < particleCount; p++) {
-
-  // create a particle with random
-  // position values, -250 -> 250
-  var pX = Math.random() * 500 - 250,
-      pY = Math.random() * 500 - 250,
-      pZ = Math.random() * 500 - 250,
-      particle = new THREE.Vertex(
-        new THREE.Vector3(pX, pY, pZ)
-      );
-
-  // add it to the geometry
-  particles.vertices.push(particle);
-}
-
-// create the particle system
-var particleSystem = new THREE.ParticleSystem(
-    particles,
-    pMaterial);
-
-// add it to the scene
-scene.add(particleSystem);
-
+// 添加控制
+const controls = new OrbitControls(camera, renderer.domElement)
+controls.enableDamping = true
+controls.dampingFactor = .15
+controls.enableZoom = false
 
 // add gltf file
 // maed by the glender
@@ -121,16 +65,21 @@ gltfLoader.load(
 
 		const model = gltf.scene;
 		const animations = gltf.animations;
-
 		mixer = new THREE.AnimationMixer( model );
 
-		const action = mixer.clipAction( animations[ 0 ] );
-		action.play();
+		for(var n in gltf.scene.children){
+			if(gltf.scene.children[n].name == "Plane"){
+				gltf.scene.children[n].material.roughness= .526;
+			}
+ 		}
 
+		// const action = mixer.clipAction( animations[ 1 ] );
+		// action.play();
 		model.position.z = -20;
-
+		model.position.y = -6;
 		scene.add( model );
 
+		mainLight.lookAt(new THREE.Vector3(0,0,0))
 	},
 );
 
@@ -174,8 +123,7 @@ function onDocumentMouseMove( event ) {
 	var dir = vector.sub( camera.position ).normalize();
 	var distance = - camera.position.z / dir.z;
 	var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
- 	cube.position.copy(pos)
-	
+
 	
 	// 获取raycaster感兴趣的对像 
     raycaster.setFromCamera( mouse, camera );    
@@ -183,20 +131,6 @@ function onDocumentMouseMove( event ) {
     for ( var i = 0; i < intersects.length; i++ ) {
         //console.log( intersects[ i ] ); 
     }
-	
-	// 画线的逻辑计算，添加点
-	var positions = line.geometry.attributes.position.array;
-	var x, y, z, index;
-	x = y = z = index = 0;
-	
-	positions.set([pos.x, pos.y +.5,pos.z], pointCounter * 3);
-	line.geometry.setDrawRange( pointCounter * 3, pointNumberTotal );
-	line.geometry.attributes.position.needsUpdate = true;
-	
-	pointCounter++;
-	if(pointCounter > 800)
-		pointCounter=0;
-	
 
 
 
